@@ -4,14 +4,13 @@ using UnityEngine.InputSystem;
 public class PlayerMovement : MonoBehaviour
 {
     public Rigidbody2D rb;
+    [Header("Movement")]
     public float movementSpeed = 5f;
-
     float horizontalMovement;
-    // Start is called once before the first execution of Update after the MonoBehaviour is created
-    void Start()
-    {
-        
-    }
+
+    [Header("Jumping")]
+    public float jumpPower = 10f;
+
 
     // Update is called once per frame
     void Update()
@@ -24,5 +23,13 @@ public class PlayerMovement : MonoBehaviour
     {
         horizontalMovement = context.ReadValue<Vector2>().x;
 
+    }
+
+    public void Jump(InputAction.CallbackContext context) 
+    {
+        if (context.performed) 
+        {
+            rb.linearVelocity = new Vector2(rb.linearVelocity.x, jumpPower);
+        }
     }
 }
