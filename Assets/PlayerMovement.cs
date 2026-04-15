@@ -28,19 +28,27 @@ public class PlayerMovement : MonoBehaviour
     [Header("WallMovement")]
     public float wallSlideSpeed = 2;
     bool isWallSliding;
+
+    //Wall jumping
     bool isWallJumping;
     float wallJumpDirection;
-    float wallJumpTime = 0.2f;
+    float wallJumpTime = 0.5f;
     float wallJumpTimer;
     public Vector2 wallJumpPower = new Vector2(5f, 7f);
 
     // Update is called once per frame
     void Update()
     {
-        rb.linearVelocity = new Vector2(horizontalMovement * movementSpeed, rb.linearVelocity.y);
         GroundCheck();
         ProcessWallSlide();
+        ProcessWallJump();
         Flip();
+
+        if (!isWallJumping) 
+        {
+            rb.linearVelocity = new Vector2(horizontalMovement * movementSpeed, rb.linearVelocity.y);
+            Flip();
+        }
 
     }
 
@@ -62,6 +70,18 @@ public class PlayerMovement : MonoBehaviour
         {
             rb.linearVelocity = new Vector2(rb.linearVelocity.x, rb.linearVelocity.y * 0.5f);
             jumpsRemaining--;
+            wallJumpTimer = 0;
+
+            //Force Flip
+            if(transform.localScale.x != wallJumpDirection)
+            {
+                isFacingRight = !isFacingRight;
+                Vector3 ls = transform.localScale;
+                ls.x *= -1f;
+                transform.localScale = ls;
+            }
+
+            Invoke(nameof(CancelWallJump),wallJumpTime + 0.1f); //Wall Jump = 0.5f -- Jump again = 0.6f
         }
         //wall jump
         if (context.performed && wallJumpTimer > 0f)
@@ -100,15 +120,36 @@ public class PlayerMovement : MonoBehaviour
         }
     }
 
+    private void ProcessWallJump()
+    {
+        if(isWallSliding)
+        {
+            isWallJumping = false;
+            wallJumpDirection = -transform.localScale.x;
+            wallJumpTimer = wallJumpTime;
+
+            CancelInvoke(nameof(CancelWallJump));
+        }
+        else if(wallJumpTimer > 0f)
+        {
+            wallJumpTimer -= Time.deltaTime;
+
+        }
+
+    }
+
+    private void CancelWallJump()
+    {
+       isWallJumping = false;
+       
+    }
+
     private bool WallCheck() 
     {
         return (Physics2D.OverlapBox(WallCheckPos.position, WallCheckSize, 0, WallLayer));
     }
 
-    private void ProcessWallJump() 
-    {
-
-    }
+   
 
     private void Flip()
     {
