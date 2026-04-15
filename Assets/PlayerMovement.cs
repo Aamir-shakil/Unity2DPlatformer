@@ -27,9 +27,13 @@ public class PlayerMovement : MonoBehaviour
 
     public void Jump(InputAction.CallbackContext context) 
     {
-        if (context.performed) 
-        {
+        if (context.performed)
+        {   //Hold down the button to jump higher, release to jump lower
             rb.linearVelocity = new Vector2(rb.linearVelocity.x, jumpPower);
+        }
+        else if (context.canceled) 
+        {
+            rb.linearVelocity = new Vector2(rb.linearVelocity.x, rb.linearVelocity.y / 2);
         }
     }
 }
