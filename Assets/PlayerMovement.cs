@@ -31,16 +31,14 @@ public class PlayerMovement : MonoBehaviour
 
     public void Jump(InputAction.CallbackContext context)
     {
-        if (IsGrounded())
+        if (context.performed && IsGrounded())
         {
-            if (context.performed)
-            {   //Hold down the button to jump higher, release to jump lower
-                rb.linearVelocity = new Vector2(rb.linearVelocity.x, jumpPower);
-            }
-            else if (context.canceled)
-            {
-                rb.linearVelocity = new Vector2(rb.linearVelocity.x, rb.linearVelocity.y / 2);
-            }
+            rb.linearVelocity = new Vector2(rb.linearVelocity.x, jumpPower);
+        }
+
+        if (context.canceled && rb.linearVelocity.y > 0f)
+        {
+            rb.linearVelocity = new Vector2(rb.linearVelocity.x, rb.linearVelocity.y * 0.5f);
         }
     }
 
