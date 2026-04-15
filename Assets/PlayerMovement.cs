@@ -11,6 +11,10 @@ public class PlayerMovement : MonoBehaviour
     [Header("Jumping")]
     public float jumpPower = 10f;
 
+    [Header("GroundCheck")]
+    public Transform groundCheckPos;
+    public Vector2 groundCheckSize = new Vector2(0.5f, 0.05f);
+    public LayerMask groundLayer;
 
     // Update is called once per frame
     void Update()
@@ -25,15 +29,33 @@ public class PlayerMovement : MonoBehaviour
 
     }
 
-    public void Jump(InputAction.CallbackContext context) 
+    public void Jump(InputAction.CallbackContext context)
     {
-        if (context.performed)
-        {   //Hold down the button to jump higher, release to jump lower
-            rb.linearVelocity = new Vector2(rb.linearVelocity.x, jumpPower);
-        }
-        else if (context.canceled) 
+        if (IsGrounded())
         {
-            rb.linearVelocity = new Vector2(rb.linearVelocity.x, rb.linearVelocity.y / 2);
+            if (context.performed)
+            {   //Hold down the button to jump higher, release to jump lower
+                rb.linearVelocity = new Vector2(rb.linearVelocity.x, jumpPower);
+            }
+            else if (context.canceled)
+            {
+                rb.linearVelocity = new Vector2(rb.linearVelocity.x, rb.linearVelocity.y / 2);
+            }
         }
+    }
+
+    private bool IsGrounded() 
+    {
+        if (Physics2D.OverlapBox(groundCheckPos.position, groundCheckSize, 0, groundLayer))
+        {
+            return true;
+        }
+        return false;
+    }
+
+    private void OnDrawGizmosSelected()
+    {
+        Gizmos.color = Color.white;
+        Gizmos.DrawWireCube(groundCheckPos.position, groundCheckSize);
     }
 }
