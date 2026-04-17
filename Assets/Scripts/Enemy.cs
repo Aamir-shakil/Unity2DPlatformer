@@ -20,13 +20,13 @@ public class Enemy : MonoBehaviour
     void Update()
     {
         //Is Grounded?
-        isGrounded = Physics2D.Raycast(transform.position, Vector2.down, 1.5f, groundLayer);
+        isGrounded = Physics2D.Raycast(transform.position, Vector2.down, 1.15f, groundLayer);
 
         //Player Direction
         float direction = Mathf.Sign(player.position.x - transform.position.x);
 
         //Player above detection
-        bool isPlayerAbove = Physics2D.Raycast(transform.position, Vector2.up, 3f, 1 << player.gameObject.layer);
+        bool isPlayerAbove = Physics2D.Raycast(transform.position, Vector2.up, 5.5f, 1 << player.gameObject.layer);
         
         if (isGrounded)
         {
@@ -40,19 +40,16 @@ public class Enemy : MonoBehaviour
             RaycastHit2D gapAhead = Physics2D.Raycast(transform.position + new Vector3(direction, 0, 0), Vector2.down, 2f, groundLayer);
 
             //if platform above
-            RaycastHit2D platformAbove = Physics2D.Raycast(transform.position, Vector2.up, 3f, groundLayer);
+            RaycastHit2D platformAbove = Physics2D.Raycast(transform.position, Vector2.up, 5.5f, groundLayer);
 
-            if (!groundInFront && !gapAhead.collider)
+            if (!groundInFront && gapAhead.collider == null)
             {
                 shouldJump = true;
             }
-            else if (isPlayerAbove && platformAbove.collider)
+            else if (isPlayerAbove && platformAbove.collider != null)
             {
                 shouldJump = true;
             }
-
-
-
         }
     }
 
