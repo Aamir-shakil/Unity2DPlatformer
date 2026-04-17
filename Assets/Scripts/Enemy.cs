@@ -3,7 +3,7 @@ using UnityEngine;
 public class Enemy : MonoBehaviour
 {
     public Transform player;
-    public float chaseSpeed = 2f;
+    public float chaseSpeed = 3f;
     public float jumpForce = 2f;
     public LayerMask groundLayer;
 
