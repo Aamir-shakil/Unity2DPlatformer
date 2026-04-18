@@ -23,6 +23,11 @@ public class PlayerHealth : MonoBehaviour
         HealthItem.OnHealthCollect += Heal;
     }
 
+    private void OnDestroy()
+    {
+        HealthItem.OnHealthCollect -= Heal;
+    }
+
     private void OnCollisionEnter2D(Collision2D collision)
     {
         Debug.Log("Collided with: " + collision.collider.name);
@@ -56,7 +61,7 @@ public class PlayerHealth : MonoBehaviour
         if (currentHealth <= 0) 
         {
             //Player dies 
-            OnPlayerDied.Invoke();
+            OnPlayerDied?.Invoke();
         }
     }
 
