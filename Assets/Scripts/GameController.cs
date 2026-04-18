@@ -1,3 +1,4 @@
+using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -5,15 +6,25 @@ public class GameController : MonoBehaviour
 {
     int progressAmount;
     public Slider progressSlider;
-    // Start is called once before the first execution of Update after the MonoBehaviour is created
+
+    public GameObject gameOverScreen;
+    public TMP_Text survivedText;
+
     void Start()
     {
         progressAmount = 0;
         progressSlider.value = 0;
         Gem.OnGemCollect += IncreaseProgressAmount;
+        PlayerHealth.OnPlayerDied += GameOverScreen;
+        gameOverScreen.SetActive(false);
 
     }
 
+    void GameOverScreen()
+    {
+        gameOverScreen.SetActive(true);
+        survivedText.text = "You survived: " + Time.timeSinceLevelLoad + " seconds";
+    }
     void IncreaseProgressAmount(int amount)
     {
         progressAmount += amount;
@@ -21,7 +32,10 @@ public class GameController : MonoBehaviour
 
         if(progressAmount >= 100)
         {
-            Debug.Log("You win!");
+            gameOverScreen.SetActive(true);
+            survivedText.text = "You Win!\n You completed the game in "
+                + Time.timeSinceLevelLoad.ToString("F1")
+                + " seconds";
         }
     }
 
