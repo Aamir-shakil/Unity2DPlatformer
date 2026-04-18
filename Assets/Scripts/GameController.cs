@@ -1,6 +1,7 @@
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
+using UnityEngine.SceneManagement;
 
 public class GameController : MonoBehaviour
 {
@@ -24,6 +25,12 @@ public class GameController : MonoBehaviour
     {
         gameOverScreen.SetActive(true);
         survivedText.text = "You survived: " + Time.timeSinceLevelLoad + " seconds";
+    }
+
+    public void ResetGame()
+    {
+        gameOverScreen.SetActive(false);
+        SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
     }
     void IncreaseProgressAmount(int amount)
     {
