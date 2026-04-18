@@ -46,6 +46,12 @@ public class GameController : MonoBehaviour
         }
     }
 
+    private void OnDestroy()
+    {
+        Gem.OnGemCollect -= IncreaseProgressAmount;
+        PlayerHealth.OnPlayerDied -= GameOverScreen;
+    }
+
     // Update is called once per frame
     void Update()
     {
