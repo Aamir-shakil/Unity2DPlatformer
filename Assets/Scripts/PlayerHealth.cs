@@ -14,14 +14,15 @@ public class PlayerHealth : MonoBehaviour
         healthUI.SetMaxHearts(currentHealth);
     }
 
-    private void OnTriggerEnter2D(Collider2D collision)
+    private void OnCollisionEnter2D(Collision2D collision)
     {
-        Enemy enemy = collision.GetComponent<Enemy>();
-        if (enemy) 
+        Debug.Log("Collided with: " + collision.collider.name);
+
+        Enemy enemy = collision.collider.GetComponentInParent<Enemy>();
+        if (enemy != null)
         {
             TakeDamage(enemy.damage);
         }
-
     }
 
     private void TakeDamage(int damage)
