@@ -1812,6 +1812,7 @@ MonoBehaviour:
   groundLayer:
     serializedVersion: 2
     m_Bits: 64
+  damage: 1
 --- !u!61 &589648788
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -4516,6 +4517,7 @@ MonoBehaviour:
   groundLayer:
     serializedVersion: 2
     m_Bits: 64
+  damage: 1
 --- !u!61 &1393820262
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -5119,6 +5121,7 @@ MonoBehaviour:
   groundLayer:
     serializedVersion: 2
     m_Bits: 64
+  damage: 1
 --- !u!61 &1902774837
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -5586,6 +5589,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e95744a86b1992e4185f889f231cd465, type: 3}
   m_Name: 
   m_EditorClassIdentifier: '::'
+  maxHealth: 3
+  healthUI: {fileID: 301727572}
 --- !u!1001 &6887564734440613493
 PrefabInstance:
   m_ObjectHideFlags: 0
