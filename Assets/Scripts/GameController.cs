@@ -24,13 +24,15 @@ public class GameController : MonoBehaviour
     void GameOverScreen()
     {
         gameOverScreen.SetActive(true);
-        survivedText.text = "You survived: " + Time.timeSinceLevelLoad + " seconds";
+        survivedText.text = "You Survived: " + Time.timeSinceLevelLoad + " Seconds";
+        Time.timeScale = 0f; // Pause the game
     }
 
     public void ResetGame()
     {
         gameOverScreen.SetActive(false);
         SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
+        Time.timeScale = 1f; // Resume the game
     }
     void IncreaseProgressAmount(int amount)
     {
@@ -43,6 +45,7 @@ public class GameController : MonoBehaviour
             survivedText.text = "You Win!\n You completed the game in "
                 + Time.timeSinceLevelLoad.ToString("F1")
                 + " seconds";
+            Time.timeScale = 0f; // Pause the game
         }
     }
 
