@@ -1,3 +1,4 @@
+using System.Collections;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
@@ -8,6 +9,7 @@ public class PlayerMovement : MonoBehaviour
     [Header("Movement")]
     public float movementSpeed = 5f;
     float horizontalMovement;
+    float speedMultiplier = 1f;
 
     [Header("Jumping")]
     public float jumpPower = 7f;
@@ -37,6 +39,32 @@ public class PlayerMovement : MonoBehaviour
     public Vector2 wallJumpPower = new Vector2(5f, 7f);
 
     // Update is called once per frame
+
+    private void Start()
+    {
+        SpeedItem.OnSpeedCollected += StartSpeedBoost;
+    }
+
+    void StartSpeedBoost(float multiplier)
+    {
+        StartCoroutine(SpeedBoostCoroutine(multiplier));
+    }
+
+    private IEnumerator SpeedBoostCoroutine(float multiplier)
+    {
+        speedMultiplier = multiplier;
+        yield return new WaitForSeconds(4f);
+        speedMultiplier = 1f;
+
+    }
+
+    private void OnDestroy()
+    {
+        SpeedItem.OnSpeedCollected-= StartSpeedBoost;
+    }
+
+
+
     void Update()
     {
         GroundCheck();
@@ -46,7 +74,7 @@ public class PlayerMovement : MonoBehaviour
 
         if (!isWallJumping) 
         {
-            rb.linearVelocity = new Vector2(horizontalMovement * movementSpeed, rb.linearVelocity.y);
+            rb.linearVelocity = new Vector2(horizontalMovement * movementSpeed * speedMultiplier, rb.linearVelocity.y);
             Flip();
         }
 
@@ -107,7 +135,7 @@ public class PlayerMovement : MonoBehaviour
 
     private void ProcessWallSlide()
     {
-        if (!isGrounded & WallCheck() & horizontalMovement != 0)
+        if (!isGrounded && WallCheck() && horizontalMovement != 0)
         {
             isWallSliding = true;
             rb.linearVelocity = new Vector2(rb.linearVelocity.x, Mathf.Max(rb.linearVelocity.y, -wallSlideSpeed));

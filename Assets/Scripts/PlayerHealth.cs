@@ -23,6 +23,7 @@ public class PlayerHealth : MonoBehaviour
         HealthItem.OnHealthCollect += Heal;
     }
 
+
     private void OnDestroy()
     {
         HealthItem.OnHealthCollect -= Heal;
