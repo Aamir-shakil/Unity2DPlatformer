@@ -22,8 +22,16 @@ public class GameController : MonoBehaviour
     private void Start()
     {
         progressAmount = 0;
-        progressSlider.value = 0;
-        gameOverScreen.SetActive(false);
+
+        if (progressSlider != null)
+        {
+            progressSlider.value = 0;
+        }
+
+        if (gameOverScreen != null)
+        {
+            gameOverScreen.SetActive(false);
+        }
     }
 
     private void OnEnable()
