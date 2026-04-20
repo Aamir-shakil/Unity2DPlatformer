@@ -3,6 +3,14 @@ using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.SceneManagement;
 
+/// <summary>
+/// Controls overall game flow including progress tracking,
+/// win state, and game over UI.
+///
+/// Acts as an Observer by subscribing to gameplay events
+/// published through GameEvents.
+/// </summary>
+
 public class GameController : MonoBehaviour
 {
     private int progressAmount;

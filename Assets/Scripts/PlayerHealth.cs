@@ -1,6 +1,14 @@
 using System.Collections;
 using UnityEngine;
 
+/// <summary>
+/// Manages player health, healing, damage, and death.
+///
+/// Publishes health and death events through GameEvents,
+/// demonstrating Observer pattern decoupling between
+/// gameplay logic and UI systems.
+/// </summary>
+
 public class PlayerHealth : MonoBehaviour
 {
     public int maxHealth = 3;
@@ -33,7 +41,7 @@ public class PlayerHealth : MonoBehaviour
             TakeDamage(enemy.damage);
         }
     }
-
+    // Restores health up to maximum value and notifies observers.
     private void Heal(int amount)
     {
         currentHealth += amount;
@@ -46,6 +54,8 @@ public class PlayerHealth : MonoBehaviour
         GameEvents.HealthChanged(currentHealth);
     }
 
+    
+    //Reduces health, updates observers, and checks death.
     private void TakeDamage(int damage)
     {
         currentHealth -= damage;

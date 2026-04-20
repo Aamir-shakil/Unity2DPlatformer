@@ -2,6 +2,13 @@ using UnityEngine;
 using UnityEngine.UI;
 using System.Collections.Generic;
 
+/// <summary>
+/// Displays player hearts UI.
+///
+/// Subscribes to health change events and updates the
+/// visual health display independently from PlayerHealth.
+/// </summary>
+
 public class HealthUI : MonoBehaviour
 {
     public Image heartPrefab;
