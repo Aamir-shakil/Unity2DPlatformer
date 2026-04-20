@@ -5,59 +5,63 @@ using UnityEngine.SceneManagement;
 
 public class GameController : MonoBehaviour
 {
-    int progressAmount;
+    private int progressAmount;
     public Slider progressSlider;
 
     public GameObject gameOverScreen;
     public TMP_Text survivedText;
 
-    void Start()
+    private void Start()
     {
         progressAmount = 0;
         progressSlider.value = 0;
-        Gem.OnGemCollect += IncreaseProgressAmount;
-        PlayerHealth.OnPlayerDied += GameOverScreen;
         gameOverScreen.SetActive(false);
-
     }
 
-    void GameOverScreen()
+    private void OnEnable()
+    {
+        GameEvents.OnGemCollected += IncreaseProgressAmount;
+        GameEvents.OnPlayerDied += ShowGameOverScreen;
+        GameEvents.OnLevelCompleted += ShowWinScreen;
+    }
+
+    private void OnDisable()
+    {
+        GameEvents.OnGemCollected -= IncreaseProgressAmount;
+        GameEvents.OnPlayerDied -= ShowGameOverScreen;
+        GameEvents.OnLevelCompleted -= ShowWinScreen;
+    }
+
+    private void IncreaseProgressAmount(int amount)
+    {
+        progressAmount += amount;
+        progressSlider.value = progressAmount;
+
+        if (progressAmount >= 100)
+        {
+            GameEvents.LevelCompleted();
+        }
+    }
+
+    private void ShowGameOverScreen()
     {
         gameOverScreen.SetActive(true);
-        survivedText.text = "You Survived: " + Time.timeSinceLevelLoad + " Seconds";
-        Time.timeScale = 0f; // Pause the game
+        survivedText.text = "You Survived: " + Time.timeSinceLevelLoad.ToString("F1") + " Seconds";
+        Time.timeScale = 0f;
+    }
+
+    private void ShowWinScreen()
+    {
+        gameOverScreen.SetActive(true);
+        survivedText.text = "You Win!\nYou completed the game in "
+            + Time.timeSinceLevelLoad.ToString("F1") + " seconds";
+        Time.timeScale = 0f;
     }
 
     public void ResetGame()
     {
         gameOverScreen.SetActive(false);
+        Time.timeScale = 1f;
         SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
-        Time.timeScale = 1f; // Resume the game
-    }
-    void IncreaseProgressAmount(int amount)
-    {
-        progressAmount += amount;
-        progressSlider.value = progressAmount;
-
-        if(progressAmount >= 100)
-        {
-            gameOverScreen.SetActive(true);
-            survivedText.text = "You Win!\n You completed the game in "
-                + Time.timeSinceLevelLoad.ToString("F1")
-                + " seconds";
-            Time.timeScale = 0f; // Pause the game
-        }
-    }
-
-    private void OnDestroy()
-    {
-        Gem.OnGemCollect -= IncreaseProgressAmount;
-        PlayerHealth.OnPlayerDied -= GameOverScreen;
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-        
     }
 }

@@ -1,4 +1,3 @@
-using NUnit.Framework;
 using UnityEngine;
 using UnityEngine.UI;
 using System.Collections.Generic;
@@ -10,43 +9,57 @@ public class HealthUI : MonoBehaviour
     public Sprite emptyHeartSprite;
 
     private List<Image> hearts = new List<Image>();
+    private int maxHearts = 3;
 
-    public void SetMaxHearts(int maxHearts) 
+    private void Start()
     {
-        foreach (Image heart in hearts) 
+        SetMaxHearts(maxHearts);
+    }
+
+    private void OnEnable()
+    {
+        GameEvents.OnHealthChanged += UpdateHearts;
+    }
+
+    private void OnDisable()
+    {
+        GameEvents.OnHealthChanged -= UpdateHearts;
+    }
+
+    public void SetMaxHearts(int amount)
+    {
+        maxHearts = amount;
+
+        foreach (Image heart in hearts)
         {
             Destroy(heart.gameObject);
         }
+
         hearts.Clear();
 
-        for (int i = 0; i < maxHearts; i++) 
+        for (int i = 0; i < maxHearts; i++)
         {
             Image newHeart = Instantiate(heartPrefab, transform);
             newHeart.sprite = fullHeartSprite;
             newHeart.color = Color.red;
             hearts.Add(newHeart);
-
-
         }
     }
 
-    public void UpdateHearts(int currentHealth) 
+    public void UpdateHearts(int currentHealth)
     {
-        for (int i = 0; i < hearts.Count; i++) 
+        for (int i = 0; i < hearts.Count; i++)
         {
-            if (i < currentHealth) 
+            if (i < currentHealth)
             {
                 hearts[i].sprite = fullHeartSprite;
                 hearts[i].color = Color.red;
-            } 
-            else 
+            }
+            else
             {
                 hearts[i].sprite = emptyHeartSprite;
                 hearts[i].color = Color.white;
             }
         }
     }
-
-
-
 }

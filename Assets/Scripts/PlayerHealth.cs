@@ -1,4 +1,3 @@
-using System;
 using System.Collections;
 using UnityEngine;
 
@@ -7,22 +6,17 @@ public class PlayerHealth : MonoBehaviour
     public int maxHealth = 3;
     private int currentHealth;
 
-    public HealthUI healthUI;
-
     private SpriteRenderer spriteRenderer;
 
-    public static event Action OnPlayerDied;
-
-
-    void Start()
+    private void Start()
     {
         currentHealth = maxHealth;
-        healthUI.SetMaxHearts(currentHealth);
-
         spriteRenderer = GetComponent<SpriteRenderer>();
-        HealthItem.OnHealthCollect += Heal;
-    }
 
+        HealthItem.OnHealthCollect += Heal;
+
+        GameEvents.HealthChanged(currentHealth);
+    }
 
     private void OnDestroy()
     {
@@ -40,29 +34,28 @@ public class PlayerHealth : MonoBehaviour
         }
     }
 
-    void Heal(int amount)
+    private void Heal(int amount)
     {
         currentHealth += amount;
+
         if (currentHealth > maxHealth)
         {
             currentHealth = maxHealth;
         }
 
-        healthUI.UpdateHearts(currentHealth);
+        GameEvents.HealthChanged(currentHealth);
     }
 
     private void TakeDamage(int damage)
     {
         currentHealth -= damage;
-        healthUI.UpdateHearts(currentHealth);
+        GameEvents.HealthChanged(currentHealth);
 
-        //Flash red
         StartCoroutine(FlashRed());
 
-        if (currentHealth <= 0) 
+        if (currentHealth <= 0)
         {
-            //Player dies 
-            OnPlayerDied?.Invoke();
+            GameEvents.PlayerDied();
         }
     }
 
@@ -71,7 +64,5 @@ public class PlayerHealth : MonoBehaviour
         spriteRenderer.color = Color.red;
         yield return new WaitForSeconds(0.2f);
         spriteRenderer.color = Color.white;
-
     }
-
 }
