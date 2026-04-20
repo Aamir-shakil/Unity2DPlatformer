@@ -79,11 +79,10 @@ public class PlayerMovement : MonoBehaviour
 
     private void UpdateWallJumpWindow()
     {
-        if (wallJumpTimer > 0f)
+        if (!CanWallSlide() && wallJumpTimer > 0f)
         {
             wallJumpTimer -= Time.deltaTime;
         }
-
     }
 
     private void FixedUpdate()
@@ -138,7 +137,7 @@ public class PlayerMovement : MonoBehaviour
 
     public bool CanWallSlide()
     {
-        return !IsGrounded && WallCheck() && horizontalMovement != 0;
+        return !IsGrounded && WallCheck() && rb.linearVelocity.y <= 0f;
     }
 
     public void ApplyWallSlide()
@@ -151,6 +150,8 @@ public class PlayerMovement : MonoBehaviour
         IsWallJumping = false;
         wallJumpDirection = -transform.localScale.x;
         wallJumpTimer = wallJumpTime;
+
+        CancelInvoke(nameof(CancelWallJump));
     }
 
     public bool CanWallJump()
@@ -160,13 +161,10 @@ public class PlayerMovement : MonoBehaviour
 
     public void PerformWallJump()
     {
-        rb.linearVelocity = new Vector2(wallJumpDirection * wallJumpPower.x, wallJumpPower.y);
-    }
-
-    public void BeginWallJumpState()
-    {
         IsWallJumping = true;
         wallJumpTimer = 0f;
+
+        rb.linearVelocity = new Vector2(wallJumpDirection * wallJumpPower.x, wallJumpPower.y);
 
         if (transform.localScale.x != wallJumpDirection)
         {
@@ -179,13 +177,7 @@ public class PlayerMovement : MonoBehaviour
         Invoke(nameof(CancelWallJump), wallJumpTime + 0.1f);
     }
 
-    public void UpdateWallJumpTimer()
-    {
-        if (wallJumpTimer > 0f)
-        {
-            wallJumpTimer -= Time.deltaTime;
-        }
-    }
+
 
     private void CancelWallJump()
     {

@@ -11,7 +11,6 @@ public class PlayerWallJumpState : IPlayerState
 
     public void Enter()
     {
-        player.BeginWallJumpState();
     }
 
     public void Exit()
@@ -20,8 +19,6 @@ public class PlayerWallJumpState : IPlayerState
 
     public void LogicUpdate()
     {
-        player.UpdateWallJumpTimer();
-
         if (!player.IsWallJumping)
         {
             player.StateMachine.ChangeState(player.AirState);

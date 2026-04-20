@@ -11,7 +11,6 @@ public class PlayerWallSlideState : IPlayerState
 
     public void Enter()
     {
-        player.StartWallJumpWindow();
     }
 
     public void Exit()
@@ -20,6 +19,8 @@ public class PlayerWallSlideState : IPlayerState
 
     public void LogicUpdate()
     {
+        player.StartWallJumpWindow();
+
         if (player.IsGrounded)
         {
             player.StateMachine.ChangeState(player.IdleState);

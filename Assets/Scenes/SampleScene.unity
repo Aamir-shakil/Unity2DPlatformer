@@ -6554,6 +6554,10 @@ PrefabInstance:
       propertyPath: wallCheckPos
       value: 
       objectReference: {fileID: 1158774238}
+    - target: {fileID: 6484447268545945672, guid: 70a897f95dbc1e446afb22d46941f222, type: 3}
+      propertyPath: wallLayer.m_Bits
+      value: 128
+      objectReference: {fileID: 0}
     - target: {fileID: 9097586607664679563, guid: 70a897f95dbc1e446afb22d46941f222, type: 3}
       propertyPath: m_LocalPosition.x
       value: -0.019
