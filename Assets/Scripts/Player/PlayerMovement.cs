@@ -39,6 +39,8 @@ public class PlayerMovement : MonoBehaviour
     private float wallJumpTimer;
     public bool IsWallJumping { get; private set; }
 
+    private IPlayerEffect currentEffect;
+
     private Coroutine speedBoostRoutine;
 
     public PlayerStateMachine StateMachine { get; private set; }
@@ -65,6 +67,7 @@ public class PlayerMovement : MonoBehaviour
     private void Start()
     {
         jumpsRemaining = maxJumps;
+        currentEffect = new BasePlayerEffect();
         SpeedItem.OnSpeedCollected += StartSpeedBoost;
         StateMachine.Initialize(IdleState);
     }
@@ -112,7 +115,7 @@ public class PlayerMovement : MonoBehaviour
     {
         if (!IsWallJumping)
         {
-            rb.linearVelocity = new Vector2(horizontalMovement * movementSpeed * speedMultiplier, rb.linearVelocity.y);
+            rb.linearVelocity = new Vector2(horizontalMovement * movementSpeed * currentEffect.GetSpeedMultiplier(), rb.linearVelocity.y);
         }
     }
 
@@ -222,9 +225,11 @@ public class PlayerMovement : MonoBehaviour
 
     private IEnumerator SpeedBoostCoroutine(float multiplier)
     {
-        speedMultiplier = multiplier;
+        currentEffect = new SpeedBoostDecorator(new BasePlayerEffect(), multiplier);
+
         yield return new WaitForSeconds(4f);
-        speedMultiplier = 1f;
+
+        currentEffect = new BasePlayerEffect();
     }
 
     private void OnDestroy()
