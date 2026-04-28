@@ -53,7 +53,7 @@ Unity Editor (recommended: 2021 LTS or 2022 LTS)
 Visual Studio or Visual Studio Code (for C# scripting)
 Installation and Setup
 1. Clone the repository
-git clone https://github.com/YOUR-USERNAME/YOUR-REPO-NAME.git
+git clone https://github.com/Aamir-shakil/Unity2DPlatformer.git
 2. Open the project in Unity
 Open Unity Hub
 Select “Open Project”
